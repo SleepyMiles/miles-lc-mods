@@ -491,6 +491,61 @@ namespace MilesModHelper
         }
     }
 
+    // ------------------------------------------------------------------ what needs installing
+
+    // Like Gale's own updates: compare the site's version with what the picked profile already has.
+    enum ModState { New, Update, Current }
+
+    class PlannedMod
+    {
+        public ModEntry Mod;
+        public ModState State;
+        public string InstalledVersion;
+
+        public string Label
+        {
+            get
+            {
+                switch (State)
+                {
+                    case ModState.New: return Mod.Name + "  v" + Mod.Version + "  (new)";
+                    case ModState.Update: return Mod.Name + "  v" + InstalledVersion + "  >  v" + Mod.Version + "  (update)";
+                    default: return Mod.Name + "  v" + Mod.Version + "  (up to date)";
+                }
+            }
+        }
+    }
+
+    static class UpdatePlan
+    {
+        public static List<PlannedMod> Build(List<ModEntry> mods, List<LocalModRecord> installed)
+        {
+            var plan = new List<PlannedMod>();
+            foreach (var m in mods)
+            {
+                var have = installed.FirstOrDefault(x => x.Name != null &&
+                    (x.Name.Equals(m.Id, StringComparison.OrdinalIgnoreCase) || x.Name.Equals(m.Name, StringComparison.OrdinalIgnoreCase)));
+                var p = new PlannedMod { Mod = m };
+                if (have == null) p.State = ModState.New;
+                else
+                {
+                    p.InstalledVersion = have.Version ?? "?";
+                    p.State = SameVersion(have.Version, m.Version) ? ModState.Current : ModState.Update;
+                }
+                plan.Add(p);
+            }
+            return plan;
+        }
+
+        static bool SameVersion(string a, string b)
+        {
+            if (a == null || b == null) return false;
+            Version va, vb;
+            if (System.Version.TryParse(a, out va) && System.Version.TryParse(b, out vb)) return va == vb;
+            return a.Trim().Equals(b.Trim(), StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
     // ------------------------------------------------------------------ install pipeline
 
     class Installer
@@ -719,8 +774,10 @@ namespace MilesModHelper
         readonly Button install = new Button();
         readonly Button cancel = new Button();
         readonly LinkLabel helperNote = new LinkLabel();
+        readonly CheckBox reinstall = new CheckBox();
 
         List<ModEntry> mods = new List<ModEntry>();
+        List<PlannedMod> plan = new List<PlannedMod>();
         string galeExe;
         bool working;
 
@@ -732,7 +789,7 @@ namespace MilesModHelper
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false; MinimizeBox = false;
             StartPosition = FormStartPosition.CenterScreen;
-            ClientSize = new Size(460, 360);
+            ClientSize = new Size(460, 384);
             Font = new Font("Segoe UI", 9.5f);
             Icon = SystemIcons.Application;
             TopMost = true; // browsers often leave the launched window behind them
@@ -741,18 +798,21 @@ namespace MilesModHelper
             modList.SetBounds(16, 40, 428, 100); modList.SelectionMode = SelectionMode.None;
             profileLabel.SetBounds(16, 152, 428, 20); profileLabel.Text = "Install into this Gale profile:";
             profileBox.SetBounds(16, 174, 428, 26); profileBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            status.SetBounds(16, 212, 428, 60); status.Text = "";
-            bar.SetBounds(16, 274, 428, 16);
-            helperNote.SetBounds(16, 296, 428, 20); helperNote.Visible = false;
-            install.SetBounds(232, 318, 104, 32); install.Text = "Install"; install.Enabled = false;
-            cancel.SetBounds(340, 318, 104, 32); cancel.Text = "Cancel";
+            reinstall.SetBounds(16, 206, 428, 22); reinstall.Text = "Reinstall mods that are already up to date"; reinstall.Visible = false;
+            status.SetBounds(16, 234, 428, 60); status.Text = "";
+            bar.SetBounds(16, 296, 428, 16);
+            helperNote.SetBounds(16, 318, 428, 20); helperNote.Visible = false;
+            install.SetBounds(232, 342, 104, 32); install.Text = "Install"; install.Enabled = false;
+            cancel.SetBounds(340, 342, 104, 32); cancel.Text = "Cancel";
 
             install.Click += (s, e) => StartInstall();
+            profileBox.SelectedIndexChanged += (s, e) => { if (!working) RefreshPlan(); };
+            reinstall.CheckedChanged += (s, e) => { if (!working) RefreshPlan(); };
             cancel.Click += (s, e) => { if (!working) Close(); };
             helperNote.LinkClicked += (s, e) => { try { Process.Start(Config.SiteUrl); } catch { } };
             FormClosing += (s, e) => { if (working) e.Cancel = true; };
 
-            Controls.AddRange(new Control[] { header, modList, profileLabel, profileBox, status, bar, helperNote, install, cancel });
+            Controls.AddRange(new Control[] { header, modList, profileLabel, profileBox, reinstall, status, bar, helperNote, install, cancel });
             AcceptButton = install; CancelButton = cancel;
 
             Shown += (s, e) => BeginInvoke(new Action(LoadIndex));
@@ -774,8 +834,7 @@ namespace MilesModHelper
                 }
                 if (mods.Count == 0) { Fail("The site has no mods listed right now."); return; }
 
-                header.Text = mods.Count == 1 ? "Install this mod:" : "Install these " + mods.Count + " mods:";
-                foreach (var m in mods) modList.Items.Add(m.Label);
+                header.Text = "Checking your profile...";
 
                 if (Versions.IsNewer(index.HelperVersion, Config.Version))
                 {
@@ -793,15 +852,50 @@ namespace MilesModHelper
                 foreach (var p in profiles) profileBox.Items.Add(p);
                 long? active = GaleDb.ActiveProfileId();
                 int idx = active.HasValue ? profiles.FindIndex(p => p.Id == active.Value) : -1;
-                profileBox.SelectedIndex = idx >= 0 ? idx : 0;
-
-                status.Text = Gale.IsRunning ? "" : "Gale is closed. The helper will open it for you.";
-                install.Enabled = true;
-                install.Focus();
+                profileBox.SelectedIndex = idx >= 0 ? idx : 0; // fires RefreshPlan
+                RefreshPlan();
             }
             catch (WebException ex) { Fail("Couldn't reach the mod site. Check your internet.\n(" + ex.Message + ")"); }
             catch (Exception ex) { Fail(ex.Message); }
             finally { Cursor = Cursors.Default; }
+        }
+
+        void RefreshPlan()
+        {
+            var profile = profileBox.SelectedItem as GaleProfile;
+            if (profile == null || mods.Count == 0) return;
+
+            try { plan = UpdatePlan.Build(mods, GaleDb.LocalMods(profile.Id)); }
+            catch (Exception ex) { Fail(ex.Message); return; }
+
+            int todo = plan.Count(p => p.State != ModState.Current);
+            int current = plan.Count - todo;
+            int updates = plan.Count(p => p.State == ModState.Update);
+
+            modList.Items.Clear();
+            foreach (var p in plan) modList.Items.Add(p.Label);
+
+            reinstall.Visible = current > 0;
+            if (reinstall.Checked) todo = plan.Count;
+
+            status.ForeColor = SystemColors.ControlText;
+            if (todo == 0)
+            {
+                header.Text = plan.Count == 1 ? "You already have the latest version:" : "You already have the latest version of all " + plan.Count + ":";
+                status.Text = "Nothing to do for \"" + profile.Name + "\".";
+                install.Text = "Install"; install.Enabled = false;
+                cancel.Text = "Close";
+                return;
+            }
+
+            header.Text = todo == plan.Count
+                ? (todo == 1 ? "Install this mod:" : "Install these " + todo + " mods:")
+                : todo + " to install, " + current + " already up to date:";
+            install.Text = updates > 0 && !reinstall.Checked && updates == todo ? "Update" : "Install";
+            install.Enabled = true;
+            cancel.Text = "Cancel";
+            status.Text = Gale.IsRunning ? "" : "Gale is closed. The helper will open it for you.";
+            install.Focus();
         }
 
         void Fail(string message)
@@ -817,8 +911,11 @@ namespace MilesModHelper
             var profile = profileBox.SelectedItem as GaleProfile;
             if (profile == null) return;
 
+            var toInstall = plan.Where(p => reinstall.Checked || p.State != ModState.Current).Select(p => p.Mod).ToList();
+            if (toInstall.Count == 0) return;
+
             working = true;
-            install.Enabled = false; cancel.Enabled = false; profileBox.Enabled = false;
+            install.Enabled = false; cancel.Enabled = false; profileBox.Enabled = false; reinstall.Enabled = false;
             status.ForeColor = SystemColors.ControlText;
             TopMost = false;
 
@@ -831,7 +928,7 @@ namespace MilesModHelper
             var thread = new Thread(() =>
             {
                 string result = null; Exception error = null;
-                try { result = installer.Run(mods, profile, galeExe); }
+                try { result = installer.Run(toInstall, profile, galeExe); }
                 catch (Exception ex) { error = ex; }
                 BeginInvoke(new Action(() =>
                 {
@@ -891,6 +988,23 @@ namespace MilesModHelper
             check(Gale.Quote(@"C:\Temp\dir\") == @"C:\Temp\dir\", "unquoted path keeps backslashes");
             check(Gale.Quote("plain") == "plain", "no quotes when not needed");
             check(Gale.InstallArgs("My Profile", @"C:\T\a.zip") == "--game lethal-company --profile \"My Profile\" --install C:\\T\\a.zip", "install args");
+
+            var site = new List<ModEntry>
+            {
+                new ModEntry { Id = "AdvancedCompany", Name = "AdvancedCompany", Version = "1.1.35" },
+                new ModEntry { Id = "LC Office Patcher", Name = "LC Office Patcher", Version = "1.0.0" },
+                new ModEntry { Id = "BunkbedRevive", Name = "BunkbedRevive", Version = "2.0.1" },
+            };
+            var have = new List<LocalModRecord>
+            {
+                new LocalModRecord { Name = "AdvancedCompany", Version = "1.1.34", Uuid = "a" },
+                new LocalModRecord { Name = "lc office patcher", Version = "1.0.0", Uuid = "b" },
+            };
+            var planned = UpdatePlan.Build(site, have);
+            check(planned[0].State == ModState.Update && planned[0].InstalledVersion == "1.1.34", "plan: older version -> update");
+            check(planned[1].State == ModState.Current, "plan: same version -> up to date (name case-insensitive)");
+            check(planned[2].State == ModState.New, "plan: missing -> new");
+            check(planned[0].Label.Contains("1.1.34") && planned[0].Label.Contains("1.1.35"), "plan label shows old and new version");
 
             check(Versions.IsNewer("1.0.1", "1.0.0") && !Versions.IsNewer("1.0.0", "1.0.0") && !Versions.IsNewer(null, "1.0.0"), "version compare");
 

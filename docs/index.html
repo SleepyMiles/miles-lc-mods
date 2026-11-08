@@ -184,7 +184,7 @@
 
     <section class="hero">
       <h1>Lethal Company mods that aren't on Thunderstore</h1>
-      <p class="lede">Click Install, pick your Gale profile, and the mod shows up in Gale like any other. No zips to drag around.</p>
+      <p class="lede">Import my Gale profile code, then click Install all and pick that profile. When I update a mod, click it again: only what changed gets installed.</p>
       <div class="actions">
         <a class="btn btn-hud btn-big" id="install-all" href="#" aria-disabled="true"><span class="ping"></span><span class="label">Install all</span></a>
       </div>
@@ -346,7 +346,7 @@
       mods.forEach(m => list.append(modRow(m)));
 
       const all = document.getElementById("install-all");
-      all.querySelector(".label").textContent = mods.length === 1 ? "Install " + mods[0].name : "Install all " + mods.length + " mods";
+      all.querySelector(".label").textContent = mods.length === 1 ? "Install " + mods[0].name : "Install or update all " + mods.length;
       all.href = SCHEME + "all";
       all.removeAttribute("aria-disabled");
       all.addEventListener("click", e => { e.preventDefault(); launch(all, all.href, mods.length + " mods"); });

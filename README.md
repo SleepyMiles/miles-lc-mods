@@ -10,7 +10,7 @@ Site: https://sleepymiles.github.io/miles-lc-mods/
 2. Click **Install** on any mod (or **Install all**).
 3. Pick your Gale profile in the window that pops up and click **Install**.
 
-To update a mod later, click Install again. Gale replaces the old version.
+To get updates, click **Install all** again. The helper checks the profile and only installs mods that are missing or out of date, like Gale's update button. (Gale's profile codes never include manually installed mods, which is why this step exists.)
 
 ## Publishing a mod or an update (Miles)
 
