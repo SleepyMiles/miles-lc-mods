@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SleepyMiles Mods</title>
+<meta name="description" content="SleepyMiles' Lethal Company mods that aren't on Thunderstore. Click Install and they go straight into your Gale profile.">
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<style>
+  :root {
+    --hull: #1b2126;
+    --hull-deep: #151a1e;
+    --panel: #222a30;
+    --rivet: #36424a;
+    --text: #e8e4da;
+    --muted: #9ba6ac;
+    --hud: #ff7a1a;
+    --hud-ink: #1b1209;
+    --scan: #7fd6e6;
+    --danger: #ff8a7a;
+
+    --display: "Chakra Petch", "Segoe UI", sans-serif;
+    --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+
+    --step--1: 0.875rem;
+    --step-0: 1rem;
+    --step-1: 1.25rem;
+    --step-2: 1.6rem;
+    --step-3: 2.4rem;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--hull);
+    background-image: linear-gradient(var(--hull-deep), var(--hull) 420px);
+    color: var(--text);
+    font: 400 var(--step-0)/1.55 var(--body);
+  }
+  a { color: var(--scan); text-underline-offset: 3px; }
+  a:hover { text-decoration-thickness: 2px; }
+  :focus-visible { outline: 2px solid var(--scan); outline-offset: 3px; }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+
+  header.top {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rivet);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font: 600 var(--step-0)/1 var(--display); letter-spacing: 0.02em; }
+  .brand img { width: 28px; height: 28px; }
+
+  .hero { padding: 56px 0 40px; }
+  .hero h1 {
+    font: 700 var(--step-3)/1.08 var(--display);
+    letter-spacing: -0.01em;
+    margin: 0 0 14px;
+    max-width: 18ch;
+  }
+  .hero p.lede { font-size: var(--step-1); color: var(--muted); margin: 0 0 28px; max-width: 46ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+  .btn {
+    --pad-x: 20px;
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 44px; padding: 0 var(--pad-x);
+    border-radius: 4px; border: 1px solid transparent;
+    font: 600 var(--step-0)/1 var(--display); letter-spacing: 0.02em;
+    text-decoration: none; cursor: pointer; white-space: nowrap;
+  }
+  .btn-hud { background: var(--hud); color: var(--hud-ink); }
+  .btn-hud:hover { background: #ff8c38; }
+  .btn-line { background: transparent; color: var(--text); border-color: var(--rivet); }
+  .btn-line:hover { border-color: var(--muted); }
+  .btn-big { min-height: 52px; --pad-x: 26px; font-size: var(--step-1); }
+  .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+
+  /* The scanner ping: the one animated moment, fired when someone clicks Install. */
+  .btn .ping {
+    position: absolute; inset: -2px; border-radius: 6px; pointer-events: none;
+    border: 2px solid var(--scan); opacity: 0;
+  }
+  .btn.pinging .ping { animation: ping 900ms cubic-bezier(.2,.7,.3,1) 1; }
+  @keyframes ping {
+    0% { opacity: 0.9; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.45, 1.9); }
+  }
+
+  .first-time {
+    margin-top: 36px; padding: 20px 22px;
+    background: var(--panel); border-left: 3px solid var(--scan); border-radius: 0 4px 4px 0;
+  }
+  .first-time h2 { font: 600 var(--step-1)/1.2 var(--display); margin: 0 0 12px; }
+  .first-time ol { margin: 0; padding-left: 1.4em; display: grid; gap: 8px; max-width: 64ch; }
+  .first-time li::marker { font-family: var(--display); font-weight: 700; color: var(--scan); }
+  .first-time .fine { color: var(--muted); font-size: var(--step--1); margin: 12px 0 0; max-width: 64ch; }
+
+  section.mods { padding: 24px 0 64px; }
+  section.mods > h2 { font: 600 var(--step-2)/1.2 var(--display); margin: 0 0 4px; }
+  section.mods > p { color: var(--muted); margin: 0 0 20px; }
+
+  .mod {
+    display: grid; grid-template-columns: 72px 1fr auto; gap: 4px 18px;
+    padding: 22px 0; border-top: 1px solid var(--rivet);
+  }
+  .mod:last-child { border-bottom: 1px solid var(--rivet); }
+  .mod .icon { grid-row: span 3; width: 72px; height: 72px; border-radius: 4px; background: var(--panel); object-fit: cover; }
+  .mod .title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .mod h3 { font: 700 var(--step-1)/1.2 var(--display); margin: 0; }
+  .mod .ver { font: 600 var(--step--1)/1 var(--display); color: var(--hud); }
+  .mod .by { color: var(--muted); font-size: var(--step--1); }
+  .mod .desc { margin: 2px 0 0; max-width: 60ch; }
+  .mod .meta { color: var(--muted); font-size: var(--step--1); margin: 6px 0 0; max-width: 64ch; }
+  .mod .meta strong { color: var(--text); font-weight: 700; }
+  .mod .note { color: var(--scan); font-size: var(--step--1); margin: 6px 0 0; }
+  .mod .side { grid-row: 1 / span 2; grid-column: 3; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .mod .side .zip { font-size: var(--step--1); }
+
+  details.more { grid-column: 2 / span 2; margin-top: 8px; }
+  details.more summary { cursor: pointer; color: var(--scan); font-size: var(--step--1); width: fit-content; }
+  details.more .tabs { display: flex; gap: 6px; margin: 12px 0 0; }
+  details.more .tabs button {
+    background: transparent; color: var(--muted); border: 1px solid var(--rivet); border-radius: 4px;
+    font: 600 var(--step--1)/1 var(--display); padding: 8px 12px; cursor: pointer;
+  }
+  details.more .tabs button[aria-selected="true"] { color: var(--text); border-color: var(--muted); }
+  .md {
+    margin-top: 10px; padding: 16px 18px; background: var(--hull-deep); border-radius: 4px;
+    max-height: 420px; overflow: auto; font-size: var(--step--1);
+  }
+  .md h1, .md h2, .md h3 { font-family: var(--display); line-height: 1.2; margin: 1.2em 0 0.4em; }
+  .md h1 { font-size: var(--step-1); } .md h2 { font-size: 1.1rem; } .md h3 { font-size: 1rem; }
+  .md :first-child { margin-top: 0; }
+  .md img { max-width: 100%; height: auto; }
+  .md code { background: var(--panel); padding: 1px 5px; border-radius: 3px; }
+  .md pre { background: var(--panel); padding: 10px; border-radius: 4px; overflow: auto; }
+  .md table { border-collapse: collapse; }
+  .md td, .md th { border: 1px solid var(--rivet); padding: 4px 8px; }
+
+  .toast {
+    position: fixed; left: 16px; right: 16px; bottom: 16px; margin: 0 auto; max-width: 560px;
+    background: var(--panel); border: 1px solid var(--rivet); border-left: 3px solid var(--hud);
+    border-radius: 4px; padding: 14px 16px; box-shadow: 0 10px 30px rgba(0,0,0,.45);
+    display: none; gap: 12px; align-items: flex-start;
+  }
+  .toast.show { display: flex; }
+  .toast p { margin: 0; flex: 1; }
+  .toast button { background: none; border: 0; color: var(--muted); font-size: 1.3rem; line-height: 1; cursor: pointer; padding: 0 2px; }
+
+  .status { color: var(--muted); padding: 24px 0; }
+  .status.error { color: var(--danger); }
+
+  footer { border-top: 1px solid var(--rivet); padding: 20px 0 40px; color: var(--muted); font-size: var(--step--1); }
+  footer p { margin: 0 0 6px; max-width: 70ch; }
+
+  @media (max-width: 640px) {
+    :root { --step-3: 1.9rem; }
+    .hero { padding: 36px 0 28px; }
+    .mod { grid-template-columns: 56px 1fr; }
+    .mod .icon { width: 56px; height: 56px; grid-row: span 2; }
+    .mod .side { grid-row: auto; grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: space-between; margin-top: 10px; }
+    details.more { grid-column: 1 / -1; }
+    header.top .btn { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn.pinging .ping { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="./"><img src="favicon.png" alt="">SleepyMiles mods</a>
+      <a class="btn btn-line helper-link" href="#first-time">Get the helper</a>
+    </header>
+
+    <section class="hero">
+      <h1>Lethal Company mods that aren't on Thunderstore</h1>
+      <p class="lede">Click Install, pick your Gale profile, and the mod shows up in Gale like any other. No zips to drag around.</p>
+      <div class="actions">
+        <a class="btn btn-hud btn-big" id="install-all" href="#" aria-disabled="true"><span class="ping"></span><span class="label">Install all</span></a>
+      </div>
+
+      <div class="first-time" id="first-time">
+        <h2>First time here?</h2>
+        <ol>
+          <li><a class="helper-download" href="#">Download Miles Mod Helper</a> (one small file).</li>
+          <li>Open it and click <strong>Set up</strong>. If Windows says it protected your PC, click <strong>More info</strong>, then <strong>Run anyway</strong>.</li>
+          <li>Come back here and click <strong>Install</strong>. Your browser asks to open the helper: allow it, and tick “Always allow” so it stops asking.</li>
+        </ol>
+        <p class="fine">You need Gale with at least one Lethal Company profile. The helper only installs mods listed on this page, and checks each download before it touches Gale.</p>
+      </div>
+    </section>
+
+    <section class="mods" aria-labelledby="mods-h">
+      <h2 id="mods-h">Mods</h2>
+      <p>Gale installs anything a mod needs from Thunderstore at the same time.</p>
+      <div id="mod-list"><p class="status">Loading mods…</p></div>
+    </section>
+
+    <footer>
+      <p>Made by SleepyMiles for friends. Not affiliated with Thunderstore, Gale or Zeekerss.</p>
+      <p>Found a bug? <a href="https://github.com/SleepyMiles/miles-lc-mods/issues">Open an issue</a>.</p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <p id="toast-text"></p>
+    <button type="button" id="toast-close" aria-label="Close">×</button>
+  </div>
+
+<script>
+(() => {
+  const SCHEME = "milesmods://install/";
+  const list = document.getElementById("mod-list");
+  const toast = document.getElementById("toast");
+  const toastText = document.getElementById("toast-text");
+  let toastTimer;
+
+  document.getElementById("toast-close").addEventListener("click", () => toast.classList.remove("show"));
+
+  function showToast(html, ms) {
+    toastText.innerHTML = html;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    if (ms) toastTimer = setTimeout(() => toast.classList.remove("show"), ms);
+  }
+
+  function formatSize(bytes) {
+    if (!bytes) return "";
+    if (bytes >= 1048576) return (bytes / 1048576).toFixed(1) + " MB";
+    return Math.max(1, Math.round(bytes / 1024)) + " KB";
+  }
+
+  function depName(dep) {
+    const parts = dep.split("-");
+    return parts.length >= 3 ? parts.slice(1, -1).join("-").replace(/_/g, " ") : dep;
+  }
+
+  function el(tag, attrs, children) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (v == null) continue;
+      if (k === "text") n.textContent = v; else n.setAttribute(k, v);
+    }
+    for (const c of children || []) if (c) n.append(c);
+    return n;
+  }
+
+  // Opening a custom link gives no success signal, so watch whether the page loses focus:
+  // when the helper (or the browser's "Open Miles Mod Helper?" prompt) appears, it does.
+  function launch(button, href, what) {
+    button.classList.remove("pinging"); void button.offsetWidth; button.classList.add("pinging");
+    let left = false;
+    const onBlur = () => { left = true; };
+    window.addEventListener("blur", onBlur, { once: true });
+    window.location.href = href;
+    showToast("Opening Miles Mod Helper for " + what.replace(/[<>&"]/g, "") + "…", 0);
+    setTimeout(() => {
+      window.removeEventListener("blur", onBlur);
+      if (left || document.hidden) {
+        showToast("Pick your Gale profile in the helper window, then click Install.", 6000);
+      } else {
+        showToast("Nothing opened? <a href=\"#first-time\">Set up the helper</a> first, then click Install again. If your browser showed a prompt, allow it.", 0);
+      }
+    }, 2500);
+  }
+
+  async function loadText(path) {
+    const r = await fetch(encodeURI(path), { cache: "no-cache" });
+    if (!r.ok) throw new Error(r.status);
+    return r.text();
+  }
+
+  function renderMarkdown(target, path) {
+    target.textContent = "Loading…";
+    loadText(path).then(md => {
+      if (!window.marked || !window.DOMPurify) { target.style.whiteSpace = "pre-wrap"; target.textContent = md; return; }
+      target.innerHTML = DOMPurify.sanitize(marked.parse(md));
+      target.querySelectorAll("a").forEach(a => { a.target = "_blank"; a.rel = "noopener"; });
+    }).catch(() => { target.textContent = "Couldn't load this file."; });
+  }
+
+  function modRow(m) {
+    const icon = el("img", { class: "icon", src: m.icon ? encodeURI(m.icon) : "favicon.png", alt: "", width: 72, height: 72, loading: "lazy" });
+
+    const title = el("div", { class: "title" }, [
+      el("h3", { text: m.name }),
+      el("span", { class: "ver", text: "v" + m.version }),
+      el("span", { class: "by", text: "by " + (m.author || "SleepyMiles") }),
+    ]);
+    const desc = el("p", { class: "desc", text: m.description || "" });
+
+    const deps = (m.dependencies || []).filter(d => !/BepInExPack/i.test(d)).map(depName);
+    const meta = el("p", { class: "meta" });
+    meta.append(el("span", { text: "Updated " + (m.updated || "") }));
+    if (deps.length) {
+      meta.append(document.createTextNode(". Also installs: "));
+      meta.append(el("strong", { text: deps.join(", ") }));
+    }
+    const note = m.notes ? el("p", { class: "note", text: m.notes }) : null;
+    const body = el("div", {}, [title, desc, meta, note]);
+
+    const install = el("a", { class: "btn btn-hud", href: SCHEME + encodeURIComponent(m.id) }, [el("span", { class: "ping" }), el("span", { text: "Install" })]);
+    install.addEventListener("click", e => { e.preventDefault(); launch(install, install.href, m.name); });
+    const zip = el("a", { class: "zip", href: m.download, text: "Download zip " + formatSize(m.size) });
+    const side = el("div", { class: "side" }, [install, zip]);
+
+    const row = el("article", { class: "mod", id: "mod-" + m.id.replace(/\s+/g, "-") }, [icon, body, side]);
+
+    const docs = [["README", m.readme], ["Changelog", m.changelog]].filter(d => d[1]);
+    if (docs.length) {
+      const more = el("details", { class: "more" }, [el("summary", { text: "Details" })]);
+      const tabs = el("div", { class: "tabs", role: "tablist" });
+      const panel = el("div", { class: "md", role: "tabpanel" });
+      docs.forEach(([label, path], i) => {
+        const b = el("button", { type: "button", role: "tab", "aria-selected": i === 0 ? "true" : "false", text: label });
+        b.addEventListener("click", () => {
+          tabs.querySelectorAll("button").forEach(x => x.setAttribute("aria-selected", "false"));
+          b.setAttribute("aria-selected", "true");
+          renderMarkdown(panel, path);
+        });
+        tabs.append(b);
+      });
+      more.append(tabs, panel);
+      more.addEventListener("toggle", () => { if (more.open && !panel.dataset.loaded) { panel.dataset.loaded = "1"; renderMarkdown(panel, docs[0][1]); } });
+      row.append(more);
+    }
+    return row;
+  }
+
+  fetch("mods.json", { cache: "no-cache" })
+    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(index => {
+      const mods = index.mods || [];
+      list.textContent = "";
+      if (!mods.length) { list.append(el("p", { class: "status", text: "No mods are listed yet." })); return; }
+      mods.forEach(m => list.append(modRow(m)));
+
+      const all = document.getElementById("install-all");
+      all.querySelector(".label").textContent = mods.length === 1 ? "Install " + mods[0].name : "Install all " + mods.length + " mods";
+      all.href = SCHEME + "all";
+      all.removeAttribute("aria-disabled");
+      all.addEventListener("click", e => { e.preventDefault(); launch(all, all.href, mods.length + " mods"); });
+
+      if (index.helper && index.helper.download) {
+        document.querySelectorAll(".helper-download").forEach(a => {
+          a.href = index.helper.download;
+          a.textContent = "Download Miles Mod Helper v" + index.helper.version;
+        });
+      }
+    })
+    .catch(err => {
+      list.textContent = "";
+      list.append(el("p", { class: "status error", text: "Couldn't load the mod list (" + err.message + "). Refresh the page to try again." }));
+    });
+})();
+</script>
+</body>
+</html>

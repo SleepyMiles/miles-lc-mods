@@ -1,0 +1,4 @@
+helper/bin/
+*.exe.config
+__pycache__/
+dl/
