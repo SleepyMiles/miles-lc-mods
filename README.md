@@ -6,6 +6,10 @@ Site: https://sleepymiles.github.io/miles-lc-mods/
 
 ## For friends
 
+**Recommended:** download [SleepyMiles Mod Manager](https://github.com/SleepyMiles/SleepyMiles-Mod-Manager/releases/latest), then import Miles's profile code. It gets mods from Thunderstore and this site in one app.
+
+**Staying on Gale?** Use the helper:
+
 1. Download **MilesModHelper.exe** from the site and run it once. Click **Set up**.
 2. Click **Install** on any mod (or **Install all**).
 3. Pick your Gale profile in the window that pops up and click **Install**.
