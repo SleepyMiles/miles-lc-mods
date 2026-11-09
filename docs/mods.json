@@ -1,5 +1,96 @@
 {
   "schema": 1,
-  "helper": null,
-  "mods": []
+  "helper": {
+    "version": "1.0.0",
+    "download": "https://github.com/SleepyMiles/miles-lc-mods/releases/download/helper-v1.0.0/MilesModHelper.exe",
+    "size": 59392,
+    "sha256": "d77db5afa6a95db85d0295cabb5e007f9252a37e202f7e2126e5c99bb944eb74",
+    "updated": "2026-11-09"
+  },
+  "mods": [
+    {
+      "id": "AdvancedCompany",
+      "name": "AdvancedCompany",
+      "author": "SleepyMiles",
+      "version": "1.1.35",
+      "description": "Unofficial compatible update for v.81 by SleepyMiles. The most advanced and by far most stable lobby mod with perfect additions for your LethalCompany adventure. Including nearly perfectly synched late joining into lobbies. Includes cosmetics compability. Fully configurable in-game with preset support.",
+      "dependencies": [
+        "BepInEx-BepInExPack-5.4.2305",
+        "Rune580-LethalCompany_InputUtils-0.7.13"
+      ],
+      "website": "https://RedactedDueToThunderstoreLethalCompanyModdingModeratorTeamPolicy",
+      "download": "https://github.com/SleepyMiles/miles-lc-mods/releases/download/AdvancedCompany-1.1.35/AdvancedCompany-1.1.35.zip",
+      "size": 28153535,
+      "sha256": "39092e901013c0951989273bcda3bb2c340b4b3c058cf304cbc562303e3e9f55",
+      "updated": "2026-11-09",
+      "icon": "mods/AdvancedCompany/icon.png",
+      "readme": "mods/AdvancedCompany/README.md",
+      "changelog": "mods/AdvancedCompany/CHANGELOG.md",
+      "notes": "Unofficial v81 update by SleepyMiles. The original AdvancedCompany is CC0."
+    },
+    {
+      "id": "BunkbedRevive_LegitsFork",
+      "name": "BunkbedRevive LegitsFork",
+      "author": "SleepyMiles",
+      "version": "2.0.3",
+      "description": "Revive dead players at the bunkbeds",
+      "dependencies": [
+        "BepInEx-BepInExPack-5.4.2304",
+        "xilophor-StaticNetcodeLib-1.1.1",
+        "AinaVT-LethalConfig-1.4.6"
+      ],
+      "website": "",
+      "download": "https://github.com/SleepyMiles/miles-lc-mods/releases/download/BunkbedRevive_LegitsFork-2.0.3/BunkbedRevive_LegitsFork-2.0.3.zip",
+      "size": 61535,
+      "sha256": "bc02f6903b90d23fa1bda0defeb6fff1c44ef3b29c6310d655313ebd317f9709",
+      "updated": "2026-11-09",
+      "icon": "mods/BunkbedRevive_LegitsFork/icon.png",
+      "readme": "mods/BunkbedRevive_LegitsFork/README.md",
+      "changelog": "mods/BunkbedRevive_LegitsFork/CHANGELOG.md",
+      "notes": "Fork of viviko's BunkbedRevive, fixed for v81."
+    },
+    {
+      "id": "LC_Office",
+      "name": "LC Office",
+      "author": "SleepyMiles",
+      "version": "2.3.6",
+      "description": "Adds new office-themed interior. Private v81 fork with the LC Office Patcher included.",
+      "dependencies": [
+        "JacobG5-JLL-1.10.0",
+        "Zaggy1024-PathfindingLib-2.4.1",
+        "Zaggy1024-SmartEnemyPathfinding-0.0.4",
+        "IAmBatby-LethalLevelLoader-1.6.9",
+        "Alice-DungeonGenerationPlus-1.5.1"
+      ],
+      "website": "https://github.com/Piggy3590/LC_Office",
+      "download": "https://github.com/SleepyMiles/miles-lc-mods/releases/download/LC_Office-2.3.6/LC_Office-2.3.6.zip",
+      "size": 35563447,
+      "sha256": "f37358cff4c7d37073362c8c00ac64056d4881fa6576abdc9f9bf13a845c7f51",
+      "updated": "2026-11-09",
+      "icon": "mods/LC_Office/icon.png",
+      "readme": "mods/LC_Office/README.md",
+      "changelog": "mods/LC_Office/CHANGELOG.md",
+      "notes": "Original by Piggy. This copy includes SleepyMiles' v81 patcher."
+    },
+    {
+      "id": "loaforcsSoundAPI_LethalCompany",
+      "name": "loaforcsSoundAPI LethalCompany",
+      "author": "SleepyMiles",
+      "version": "1.0.3",
+      "description": "LethalCompany bindings for loaforcsSoundAPI (v2)",
+      "dependencies": [
+        "BepInEx-BepInExPack-5.4.2100",
+        "loaforc-loaforcsSoundAPI-2.0.0"
+      ],
+      "website": "https://github.com/loaforcsSoundAPI/loaforcsSoundAPI.LethalCompany",
+      "download": "https://github.com/SleepyMiles/miles-lc-mods/releases/download/loaforcsSoundAPI_LethalCompany-1.0.3/loaforcsSoundAPI_LethalCompany-1.0.3.zip",
+      "size": 39241,
+      "sha256": "e15042060a830edf9a9fa447422ff35f7cac6a682305c2a2d80aabd0b3406659",
+      "updated": "2026-11-09",
+      "icon": "mods/loaforcsSoundAPI_LethalCompany/icon.png",
+      "readme": "mods/loaforcsSoundAPI_LethalCompany/README.md",
+      "changelog": null,
+      "notes": "Fork of loaforc's SoundAPI bindings (GPL-3.0)."
+    }
+  ]
 }
