@@ -3,8 +3,8 @@
   "helper": {
     "version": "1.0.1",
     "download": "https://github.com/SleepyMiles/miles-lc-mods/releases/download/helper-v1.0.1/MilesModHelper.exe",
-    "size": 59392,
-    "sha256": "d77db5afa6a95db85d0295cabb5e007f9252a37e202f7e2126e5c99bb944eb74",
+    "size": 61440,
+    "sha256": "122081e0da7347c735bb726e636b8337b1eada3c6a0b9b0242561ccb04d53c8e",
     "updated": "2026-11-09"
   },
   "mods": [
