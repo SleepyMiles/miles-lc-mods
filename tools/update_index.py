@@ -20,6 +20,9 @@ import sys
 import urllib.parse
 import zipfile
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import build_app_index  # noqa: E402  (the index SleepyMiles Mod Manager reads)
+
 REPO = "SleepyMiles/miles-lc-mods"
 DOWNLOAD_BASE = f"https://github.com/{REPO}/releases/download/"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -77,8 +80,9 @@ def read_manifest(z):
     for key, kind in (("name", str), ("description", str), ("version_number", str), ("dependencies", list), ("website_url", str)):
         if not isinstance(m.get(key), kind):
             fail(f"manifest.json needs \"{key}\" ({kind.__name__}); Gale won't import the zip without it.")
-    if not re.fullmatch(r"[A-Za-z0-9_.\- ]{1,100}", m["name"]):
-        fail(f"manifest name \"{m['name']}\" may only use letters, numbers, spaces, _ . -")
+    # Same rule as Thunderstore: the mod manager builds Owner-Name-Version identifiers from this.
+    if not re.fullmatch(r"[A-Za-z0-9_]{1,100}", m["name"]):
+        fail(f"manifest name \"{m['name']}\" may only use letters, numbers and _ (like Thunderstore).")
     if not SEMVER.match(m["version_number"]):
         fail(f"version_number \"{m['version_number']}\" must look like 1.2.3")
     for d in m["dependencies"]:
@@ -92,6 +96,12 @@ def add_mod(index, tag, path, notes):
     with zipfile.ZipFile(path) as z:
         m = read_manifest(z)
         name = m["name"]
+        expected = f"{name}-{m['version_number']}"
+        # The mod manager downloads releases/download/<Name>-<version>/<Name>-<version>.zip, so these must match.
+        if tag != expected:
+            fail(f"the release tag must be \"{expected}\" (manifest name + version), not \"{tag}\".")
+        if filename.replace(" ", ".") != expected + ".zip":
+            fail(f"the zip must be named \"{expected}.zip\", not \"{filename}\". Rename it and upload it again.")
         out = os.path.join(DOCS, "mods", name)
         os.makedirs(out, exist_ok=True)
         files = {n.lower(): n for n in z.namelist()}
@@ -103,6 +113,18 @@ def add_mod(index, tag, path, notes):
                     f.write(z.read(src))
             elif os.path.exists(dst):
                 os.remove(dst)
+
+        def text(key):
+            n = files.get(key)
+            return z.read(n).decode("utf-8-sig", errors="replace") if n else None
+
+        history = build_app_index.load_history()
+        build_app_index.record_version(
+            history, name, m["version_number"], m["description"], [d.strip() for d in m["dependencies"]],
+            m["website_url"], os.path.getsize(path), build_app_index.now_iso(),
+            readme=text("readme.md"), changelog=text("changelog.md"))
+        build_app_index.save_history(history)
+        build_app_index.build(history)
 
     old = next((x for x in index["mods"] if x["id"].lower() == name.lower()), None)
     entry = {

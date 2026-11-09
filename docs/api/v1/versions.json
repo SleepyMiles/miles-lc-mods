@@ -1,0 +1,68 @@
+{
+  "mods": {
+    "AdvancedCompany": {
+      "date_created": "2026-11-09T09:28:47Z",
+      "versions": {
+        "1.1.35": {
+          "date_created": "2026-11-09T09:28:47Z",
+          "dependencies": [
+            "BepInEx-BepInExPack-5.4.2305",
+            "Rune580-LethalCompany_InputUtils-0.7.13"
+          ],
+          "description": "Unofficial compatible update for v.81 by SleepyMiles. The most advanced and by far most stable lobby mod with perfect additions for your LethalCompany adventure. Including nearly perfectly synched late joining into lobbies. Includes cosmetics compability. Fully configurable in-game with preset support.",
+          "file_size": 28153535,
+          "website_url": "https://RedactedDueToThunderstoreLethalCompanyModdingModeratorTeamPolicy"
+        }
+      }
+    },
+    "BunkbedRevive_LegitsFork": {
+      "date_created": "2026-11-09T09:28:48Z",
+      "versions": {
+        "2.0.3": {
+          "date_created": "2026-11-09T09:28:48Z",
+          "dependencies": [
+            "BepInEx-BepInExPack-5.4.2304",
+            "xilophor-StaticNetcodeLib-1.1.1",
+            "AinaVT-LethalConfig-1.4.6"
+          ],
+          "description": "Revive dead players at the bunkbeds",
+          "file_size": 61535,
+          "website_url": ""
+        }
+      }
+    },
+    "LC_Office": {
+      "date_created": "2026-11-09T09:28:48Z",
+      "versions": {
+        "2.3.6": {
+          "date_created": "2026-11-09T09:28:48Z",
+          "dependencies": [
+            "JacobG5-JLL-1.10.0",
+            "Zaggy1024-PathfindingLib-2.4.1",
+            "Zaggy1024-SmartEnemyPathfinding-0.0.4",
+            "IAmBatby-LethalLevelLoader-1.6.9",
+            "Alice-DungeonGenerationPlus-1.5.1"
+          ],
+          "description": "Adds new office-themed interior. Private v81 fork with the LC Office Patcher included.",
+          "file_size": 35563447,
+          "website_url": "https://github.com/Piggy3590/LC_Office"
+        }
+      }
+    },
+    "loaforcsSoundAPI_LethalCompany": {
+      "date_created": "2026-11-09T09:28:49Z",
+      "versions": {
+        "1.0.3": {
+          "date_created": "2026-11-09T09:28:49Z",
+          "dependencies": [
+            "BepInEx-BepInExPack-5.4.2100",
+            "loaforc-loaforcsSoundAPI-2.0.0"
+          ],
+          "description": "LethalCompany bindings for loaforcsSoundAPI (v2)",
+          "file_size": 39241,
+          "website_url": "https://github.com/loaforcsSoundAPI/loaforcsSoundAPI.LethalCompany"
+        }
+      }
+    }
+  }
+}
