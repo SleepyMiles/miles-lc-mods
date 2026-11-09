@@ -22,7 +22,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -34,14 +36,14 @@ using Microsoft.Win32;
 [assembly: AssemblyTitle("Miles Mod Helper")]
 [assembly: AssemblyProduct("Miles Mod Helper")]
 [assembly: AssemblyDescription("Installs SleepyMiles' Lethal Company mods into Gale")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.1.0")]
+[assembly: AssemblyFileVersion("1.0.1.0")]
 
 namespace MilesModHelper
 {
     static class Config
     {
-        public const string Version = "1.0.0";
+        public const string Version = "1.0.1";
         public const string Scheme = "milesmods";
         public const string SiteUrl = "https://sleepymiles.github.io/miles-lc-mods/";
         public const string IndexUrl = SiteUrl + "mods.json";
@@ -101,7 +103,10 @@ namespace MilesModHelper
                     return 1;
                 }
 
-                Application.Run(new InstallForm(request));
+                long preselect = -1;
+                for (int i = 1; i + 1 < args.Length; i++)
+                    if (args[i] == "--profile-id") long.TryParse(args[i + 1], out preselect);
+                Application.Run(new InstallForm(request, preselect));
                 return 0;
             }
             catch (Exception ex)
@@ -124,6 +129,7 @@ namespace MilesModHelper
     {
         public bool All;
         public List<string> Ids = new List<string>();
+        public string Raw;
 
         static readonly Regex IdPattern = new Regex(@"^[A-Za-z0-9_.\- ]{1,100}$");
 
@@ -144,7 +150,7 @@ namespace MilesModHelper
                 return false;
             }
 
-            var r = new LinkRequest();
+            var r = new LinkRequest { Raw = link };
             foreach (string raw in parts[1].Split(','))
             {
                 string id = raw.Trim();
@@ -419,6 +425,38 @@ namespace MilesModHelper
 
         public static bool IsRunning { get { return Running().Length > 0; } }
 
+        // A Gale started "as administrator" can't receive commands from a normal (non-admin) program:
+        // Windows blocks it. We can tell because reading its exe path is denied.
+        public static bool RunningAsAdmin()
+        {
+            foreach (var p in Running())
+            {
+                try { var unused = p.MainModule.FileName; }
+                catch (Win32Exception ex) { if (ex.NativeErrorCode == 5) return true; }
+                catch { }
+            }
+            return false;
+        }
+
+        // Starts Gale. Throws ElevationRequiredException when Windows says Gale must run as administrator
+        // (for example "Run this program as an administrator" is ticked in Gale.exe's Compatibility tab).
+        public static void Start(string exe, string args)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(exe, args ?? "")
+                {
+                    UseShellExecute = false,
+                    WorkingDirectory = Path.GetDirectoryName(exe),
+                });
+            }
+            catch (Win32Exception ex)
+            {
+                if (ex.NativeErrorCode == 740) throw new ElevationRequiredException();
+                throw;
+            }
+        }
+
         public static string FindExe()
         {
             foreach (var p in Running())
@@ -546,6 +584,46 @@ namespace MilesModHelper
         }
     }
 
+    // ------------------------------------------------------------------ administrator handling
+
+    class ElevationRequiredException : Exception
+    {
+        public ElevationRequiredException() : base("Gale is set to run as administrator.") { }
+    }
+
+    static class Elevation
+    {
+        public static bool IsElevated
+        {
+            get
+            {
+                try { return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator); }
+                catch { return false; }
+            }
+        }
+
+        // Re-opens the helper as administrator (one Windows prompt) with the same link and profile.
+        // Returns false if the person clicked No on the prompt.
+        public static bool Relaunch(string link, long profileId)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(Assembly.GetExecutingAssembly().Location,
+                    Gale.Quote(link) + " --profile-id " + profileId)
+                {
+                    UseShellExecute = true,
+                    Verb = "runas",
+                });
+                return true;
+            }
+            catch (Win32Exception ex)
+            {
+                if (ex.NativeErrorCode == 1223) return false; // cancelled
+                throw;
+            }
+        }
+    }
+
     // ------------------------------------------------------------------ install pipeline
 
     class Installer
@@ -558,10 +636,12 @@ namespace MilesModHelper
             string tempDir = Path.Combine(Path.GetTempPath(), "MilesModHelper");
             Directory.CreateDirectory(tempDir);
 
+            if (!Elevation.IsElevated && Gale.RunningAsAdmin()) throw new ElevationRequiredException();
+
             if (!Gale.IsRunning)
             {
                 Status("Opening Gale...");
-                Process.Start(new ProcessStartInfo(galeExe) { UseShellExecute = false, WorkingDirectory = Path.GetDirectoryName(galeExe) });
+                Gale.Start(galeExe, null);
                 for (int i = Config.GaleWarmupSeconds; i > 0; i--)
                 {
                     Status("Waiting for Gale to load its mod list... " + i + "s");
@@ -583,11 +663,7 @@ namespace MilesModHelper
                 var before = new HashSet<string>(GaleDb.LocalMods(profile.Id).Select(x => x.Uuid ?? ""));
 
                 Status("Installing " + m.Name + " into \"" + profile.Name + "\"...");
-                Process.Start(new ProcessStartInfo(galeExe, Gale.InstallArgs(profile.Name, zip))
-                {
-                    UseShellExecute = false,
-                    WorkingDirectory = Path.GetDirectoryName(galeExe),
-                });
+                Gale.Start(galeExe, Gale.InstallArgs(profile.Name, zip));
 
                 var sw = Stopwatch.StartNew();
                 LocalModRecord added = null;
@@ -781,9 +857,13 @@ namespace MilesModHelper
         string galeExe;
         bool working;
 
-        public InstallForm(LinkRequest request)
+        readonly long preselectProfileId;
+        bool needsAdmin;
+
+        public InstallForm(LinkRequest request, long preselectProfileId)
         {
             this.request = request;
+            this.preselectProfileId = preselectProfileId;
 
             Text = Config.AppName;
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -802,7 +882,7 @@ namespace MilesModHelper
             status.SetBounds(16, 234, 428, 60); status.Text = "";
             bar.SetBounds(16, 296, 428, 16);
             helperNote.SetBounds(16, 318, 428, 20); helperNote.Visible = false;
-            install.SetBounds(232, 342, 104, 32); install.Text = "Install"; install.Enabled = false;
+            install.SetBounds(200, 342, 136, 32); install.Text = "Install"; install.Enabled = false;
             cancel.SetBounds(340, 342, 104, 32); cancel.Text = "Cancel";
 
             install.Click += (s, e) => StartInstall();
@@ -850,7 +930,7 @@ namespace MilesModHelper
                 if (profiles.Count == 0) { Fail("You have no Lethal Company profiles in Gale. Make one in Gale, then click Install again."); return; }
 
                 foreach (var p in profiles) profileBox.Items.Add(p);
-                long? active = GaleDb.ActiveProfileId();
+                long? active = preselectProfileId > 0 ? preselectProfileId : GaleDb.ActiveProfileId();
                 int idx = active.HasValue ? profiles.FindIndex(p => p.Id == active.Value) : -1;
                 profileBox.SelectedIndex = idx >= 0 ? idx : 0; // fires RefreshPlan
                 RefreshPlan();
@@ -911,6 +991,18 @@ namespace MilesModHelper
             var profile = profileBox.SelectedItem as GaleProfile;
             if (profile == null) return;
 
+            if (needsAdmin)
+            {
+                try
+                {
+                    if (Elevation.Relaunch(request.Raw, profile.Id)) { Close(); return; }
+                    status.ForeColor = Color.Firebrick;
+                    status.Text = "You clicked No, so nothing was installed. Click Install as admin and choose Yes to continue.";
+                }
+                catch (Exception ex) { status.ForeColor = Color.Firebrick; status.Text = ex.Message; }
+                return;
+            }
+
             var toInstall = plan.Where(p => reinstall.Checked || p.State != ModState.Current).Select(p => p.Mod).ToList();
             if (toInstall.Count == 0) return;
 
@@ -934,10 +1026,23 @@ namespace MilesModHelper
                 {
                     working = false;
                     cancel.Enabled = true; cancel.Text = "Close";
-                    if (error != null)
+                    if (error is ElevationRequiredException && !Elevation.IsElevated)
+                    {
+                        needsAdmin = true;
+                        bar.Value = 0;
+                        status.ForeColor = SystemColors.ControlText;
+                        status.Text = "Gale is set to run as administrator, so the helper needs to as well. Click Install as admin, then Yes on the Windows prompt.";
+                        install.Text = "Install as admin";
+                        install.Enabled = true;
+                        profileBox.Enabled = true;
+                        install.Focus();
+                    }
+                    else if (error != null)
                     {
                         status.ForeColor = Color.Firebrick;
-                        status.Text = error.Message;
+                        status.Text = error is ElevationRequiredException
+                            ? "Windows still says Gale needs administrator rights. Close Gale and try again."
+                            : error.Message;
                     }
                     else
                     {
@@ -1005,6 +1110,9 @@ namespace MilesModHelper
             check(planned[1].State == ModState.Current, "plan: same version -> up to date (name case-insensitive)");
             check(planned[2].State == ModState.New, "plan: missing -> new");
             check(planned[0].Label.Contains("1.1.34") && planned[0].Label.Contains("1.1.35"), "plan label shows old and new version");
+
+            check(LinkRequest.TryParse("milesmods://install/all", out r, out err) && r.Raw == "milesmods://install/all", "raw link kept for admin relaunch");
+            check(Gale.Quote("milesmods://install/LC%20Office") == "milesmods://install/LC%20Office", "link passes through relaunch quoting");
 
             check(Versions.IsNewer("1.0.1", "1.0.0") && !Versions.IsNewer("1.0.0", "1.0.0") && !Versions.IsNewer(null, "1.0.0"), "version compare");
 
