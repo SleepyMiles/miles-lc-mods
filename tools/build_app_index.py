@@ -5,7 +5,11 @@ SleepyMiles Mod Manager (a fork of Gale) treats this site as a second mod source
 It expects the same files Gale reads from Thunderstore/Hexium:
 
   api/v1/package-listing-index.gz      gzip JSON: list of chunk URLs
-  api/v1/packages-0.json.gz            gzip JSON: list of PackageListing (Thunderstore's format)
+  api/v1/packages-<hash>.json.gz       gzip JSON: list of PackageListing (Thunderstore's format)
+
+The chunk is named after a hash of its contents, so a new list always has a new address and GitHub
+Pages' CDN (which caches files for up to 10 minutes) can never hand out an old copy of it. The app
+asks for the small index with a cache-busting query, so it always sees the newest chunk name.
   api/v1/categories.json               {"results": []}
   api/v1/markdown/<name>/<version>/readme.json, changelog.json   {"markdown": "..."}
 
@@ -13,7 +17,9 @@ Every published version is kept in versions.json, so profile codes that pin an o
 (the zip for each version stays on its GitHub release).
 """
 import datetime
+import glob
 import gzip
+import hashlib
 import json
 import os
 import uuid
@@ -25,6 +31,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOCS = os.path.join(ROOT, "docs")
 API = os.path.join(DOCS, "api", "v1")
 HISTORY = os.path.join(API, "versions.json")
+RECENT_CHUNKS = os.path.join(API, "chunks.json")
+KEEP_CHUNKS = 5  # older chunk files are deleted; a few are kept for apps mid-download
 
 # Stable IDs: the same mod always gets the same UUID, and they can't collide with Thunderstore's random ones.
 NAMESPACE = uuid.UUID("5f0c8c7e-3d1a-4b9e-9a51-6d1c2a7f4e10")
@@ -111,6 +119,15 @@ def listing(name, entry):
     }
 
 
+def gz_bytes(data):
+    import io
+    raw = json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    buf = io.BytesIO()
+    with gzip.GzipFile(fileobj=buf, mode="wb", mtime=0) as gz:
+        gz.write(raw)
+    return buf.getvalue()
+
+
 def write_gz_json(path, data):
     raw = json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     # mtime=0 keeps the file byte-identical when nothing changed, so commits stay clean.
@@ -123,8 +140,28 @@ def build(history=None):
     history = history or load_history()
     os.makedirs(API, exist_ok=True)
     packages = [listing(name, entry) for name, entry in sorted(history["mods"].items(), key=lambda kv: kv[0].lower())]
-    write_gz_json(os.path.join(API, "packages-0.json.gz"), packages)
-    write_gz_json(os.path.join(API, "package-listing-index.gz"), [SITE + "api/v1/packages-0.json.gz"])
+    chunk = gz_bytes(packages)
+    chunk_name = f"packages-{hashlib.sha256(chunk).hexdigest()[:12]}.json.gz"
+    with open(os.path.join(API, chunk_name), "wb") as f:
+        f.write(chunk)
+    # Older app versions (1.0.0-1.0.6) still read this fixed name.
+    with open(os.path.join(API, "packages-0.json.gz"), "wb") as f:
+        f.write(chunk)
+    write_gz_json(os.path.join(API, "package-listing-index.gz"), [SITE + "api/v1/" + chunk_name])
+
+    recent = []
+    if os.path.exists(RECENT_CHUNKS):
+        with open(RECENT_CHUNKS, encoding="utf-8") as f:
+            recent = json.load(f)
+    recent = [chunk_name] + [c for c in recent if c != chunk_name]
+    recent = recent[:KEEP_CHUNKS]
+    with open(RECENT_CHUNKS, "w", encoding="utf-8", newline="\n") as f:
+        json.dump(recent, f, indent=2)
+        f.write("\n")
+    for old in glob.glob(os.path.join(API, "packages-*.json.gz")):
+        base = os.path.basename(old)
+        if base != "packages-0.json.gz" and base not in recent:
+            os.remove(old)
     with open(os.path.join(API, "categories.json"), "w", encoding="utf-8", newline="\n") as f:
         json.dump({"results": []}, f)
         f.write("\n")
