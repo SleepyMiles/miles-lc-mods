@@ -29,6 +29,25 @@
       "notes": "Unofficial v81 update by SleepyMiles. The original AdvancedCompany is CC0."
     },
     {
+      "id": "BetterSettings",
+      "name": "BetterSettings",
+      "author": "SleepyMiles",
+      "version": "0.2.0",
+      "description": "A new settings menu: separate volume sliders (effects, music, voice), voice modes, free FPS limit, tabs for Audio, Display, Controls and Keybinds.",
+      "dependencies": [
+        "BepInEx-BepInExPack-5.4.2305"
+      ],
+      "website": "https://github.com/SleepyMiles/BetterSettings",
+      "download": "https://github.com/SleepyMiles/miles-lc-mods/releases/download/BetterSettings-0.2.0/BetterSettings-0.2.0.zip",
+      "size": 50187,
+      "sha256": "99f2c356b3dd0790849864fbe9f704ed67531a56023642c3d273cb32607583d4",
+      "updated": "2026-11-10",
+      "icon": "mods/BetterSettings/icon.png",
+      "readme": "mods/BetterSettings/README.md",
+      "changelog": "mods/BetterSettings/CHANGELOG.md",
+      "notes": null
+    },
+    {
       "id": "BunkbedRevive_LegitsFork",
       "name": "BunkbedRevive LegitsFork",
       "author": "SleepyMiles",

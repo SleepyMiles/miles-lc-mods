@@ -1,0 +1,29 @@
+# Better Settings
+
+Replaces the game's settings screen (main menu and pause menu) with a tabbed one in the game's own style. Only changes your own game: nobody else needs it.
+
+## Audio
+- **Master**, **Sound effects**, and three **Music** sliders: Menu, In game (landing and ambient music), From mods (LC Office elevator, Facility Meltdown and others).
+- **Voice chat: friends** (up to 200%, with a limiter so a boost doesn't crackle) and **Voice chat: your mic** (up to 200%).
+- **Microphone**: pick your input device, Refresh for a newly plugged-in mic, a mic test bar.
+- **Voice mode**: Voice activation, Push to talk, Push to mute, Toggle mute, Mic off.
+
+## Display
+- Resolution (the game's "Pixel Resolution"; with ResolutionAdjust its real resolutions are listed) and display mode (Apply shows up when you change it; goes back after 10 seconds if you don't confirm).
+- **Limit frame rate** with any number you type, V-Sync, Show FPS, Gamma.
+- Terrain / grass detail, pixel resolution, motion blur, indirect lighting, head bobbing, arachnophobia mode.
+
+## Controls
+- Look sensitivity, invert Y, invert item scroll, toggle sprint, **toggle crouch** (off = hold to crouch).
+
+## Keybinds
+- The game's keys and a section for every mod that has keys (through InputUtils), in the same style. Click a key, press the new one; Reset puts one key back.
+- Mod keys are saved the way InputUtils saves them, so the mods keep working. Controller keys: "Controller keys" opens the old screen.
+
+## Good to know
+- Everything applies right away; there is no "Confirm changes".
+- Mod music is found by rule: a sound the game itself doesn't have that is at least 20 seconds long, or has music / theme / song in its name. The log lists every sound it counts as mod music. Fix wrong guesses with **Always music** / **Never music** in the config.
+- `General > Use the new settings menu = false` gives the game's own screen back.
+- Push to mute / Toggle mute use the game's own mic switch, so HUD mods (EladsHUD+'s red mic icon) show when you're muted.
+- With SkipIntro's menu colors turned on (and "SubMenus"), this menu uses the same colors.
+- Refresh (microphones) works in the main menu: it restarts the game's audio so the list is read again.

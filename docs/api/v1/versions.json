@@ -25,6 +25,20 @@
         }
       }
     },
+    "BetterSettings": {
+      "date_created": "2026-11-10T15:32:57Z",
+      "versions": {
+        "0.2.0": {
+          "date_created": "2026-11-10T15:32:57Z",
+          "dependencies": [
+            "BepInEx-BepInExPack-5.4.2305"
+          ],
+          "description": "A new settings menu: separate volume sliders (effects, music, voice), voice modes, free FPS limit, tabs for Audio, Display, Controls and Keybinds.",
+          "file_size": 50187,
+          "website_url": "https://github.com/SleepyMiles/BetterSettings"
+        }
+      }
+    },
     "BunkbedRevive_LegitsFork": {
       "date_created": "2026-11-09T09:28:48Z",
       "versions": {
