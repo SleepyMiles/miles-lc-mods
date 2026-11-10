@@ -6,7 +6,7 @@ Site: https://sleepymiles.github.io/miles-lc-mods/
 
 ## For friends
 
-**Recommended:** download [SleepyMiles Mod Manager](https://github.com/SleepyMiles/SleepyMiles-Mod-Manager/releases/latest), then import Miles's profile code. It gets mods from Thunderstore and this site in one app.
+**Recommended:** download [Miles Mod Manager](https://github.com/SleepyMiles/SleepyMiles-Mod-Manager/releases/latest), then import Miles's profile code. It gets mods from Thunderstore and this site in one app.
 
 **Staying on Gale?** Use the helper:
 
