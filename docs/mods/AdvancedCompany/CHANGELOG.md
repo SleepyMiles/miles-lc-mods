@@ -1,3 +1,7 @@
+# 1.1.36
+### Fixes
+- Voice chat: people sometimes couldn't hear each other after landing on a moon. LethalPerformance deletes every audio mixer that isn't the game's own when a moon loads, and that took AdvancedCompany's voice mixer with it (it could only come back by restarting the game). AdvancedCompany now does that clean-up itself and keeps its voice mixers.
+
 # 1.1.35
 ### New
 - **Weather menu: weathers from other mods.** With WeatherRegistry (and WeatherTweaks' combined / progressing weathers), every modded weather now gets its own scrap amount and scrap value row under the game's six, like modded moons do. They're in the menu right away (Wesley's Weathers, WeatherTweaks' mixes...); weathers that another mod only adds once a game starts show up after you've started one. Their starting values are the mods' own multipliers. Remove the mod and its weathers leave the menu (your numbers stay saved and come back if you add it again).
