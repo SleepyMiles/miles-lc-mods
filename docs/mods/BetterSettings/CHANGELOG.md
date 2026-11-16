@@ -1,3 +1,46 @@
+# 0.4.5
+- Mods: a setting with a slider now has its value in a box next to it. Type the exact amount and press Enter (or click away); it stays inside the setting's range, and a comma works as the decimal point. Dragging the slider still works and updates the box.
+
+# 0.4.4
+- Text boxes: the blinking text cursor sits on the text line (it was drawn too high).
+
+# 0.4.3
+- The fade in a lobby (Resolution / Gamma) also takes the sidebar's shade, its line and the scanlines away, so nothing is left over the game.
+- Hide LethalConfig's buttons: the button isn't added at all now, so the menu looks exactly like it does without LethalConfig; switching it on and off no longer moves the other buttons a bit further each time. Switching it back on adds the button when you leave the settings.
+
+# 0.4.2
+- In a lobby, changing Resolution or Gamma now really shows the game behind the menu (the pause menu's own background was still in the way).
+- Color picker: shade square, hue strip, red / green / blue sliders, hex box, before / now, and a color table.
+- Config files without a loaded mod (LethalResonance's sound pack, extra files) are listed under their own mod with name and icon; only files that match no installed mod stay in "Other config files".
+
+# 0.4.1
+- Mods tab: search box for mod names; the settings search can look in all mods or only the selected one.
+- Sections start folded and stay as you left them until the game is closed; unfolding keeps your place in the list.
+- One line per setting; the description, default and allowed values are behind **?**.
+- Long values: **...** opens a big editor (as text or as a list).
+- Color picker, buttons that mods add in LethalConfig, NEEDS A RESTART marks, LOCKED settings (LethalConfig's "can't change now").
+- "Other config files" is one entry with a file box; mods with several config files get the same box.
+- Mouse wheel moves lists one step per notch (it jumped to the end); lists have a bar to drag.
+- In a lobby, changing Resolution or Gamma makes only the background see-through for 5 seconds, like the game's own menu.
+
+# 0.4.0
+- New **Mods** tab (when LethalConfig is installed): every mod's settings with icon, sections, search across all mods, Reset per setting, and click-and-press for keys that mods keep as text.
+- Config files no loaded mod owns (sound packs like LethalResonance) are listed under "Other config files".
+- Option to hide LethalConfig's buttons in the main menu and pause menu (on by default).
+- Dropdown lists with many entries scroll.
+
+# 0.3.1
+- Removed the audio restart behind the mic Refresh button: it froze the game and silenced sound packs (LethalResonance) until a restart. Refresh only reads the list again now.
+- The settings file is written a moment after the last change instead of on every slider step (no more "Saved 1 config(s)" spam with LethalPerformance).
+
+# 0.3.0
+- Fixed: the menu music of sound packs (LethalResonance) didn't play. The music stays where the game plays it now.
+- Mod music played as a one-off sound (LC Office's elevator) follows "From mods"; the item drop pod tune follows "In game".
+- Keybinds: Keyboard / Mouse and Controller switch, and a search box.
+- Voice modes: Voice activation and Toggle mute are one mode, "Toggle".
+- In a lobby, changing Resolution fades the menu for a moment so you can see the game.
+- Mic Refresh restarts the audio harder and writes what it found to the log.
+
 # 0.2.0
 - Keybinds tab: own key list (the game + one section per mod with InputUtils keys) instead of the InputUtils screen.
 - Resolution is the game's Pixel Resolution (ResolutionAdjust's list shows up); Apply only appears when the display mode changes.

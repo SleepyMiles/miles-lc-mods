@@ -36,6 +36,15 @@
           "description": "A new settings menu: separate volume sliders (effects, music, voice), voice modes, free FPS limit, tabs for Audio, Display, Controls and Keybinds.",
           "file_size": 50187,
           "website_url": "https://github.com/SleepyMiles/BetterSettings"
+        },
+        "0.4.5": {
+          "date_created": "2026-11-16T17:21:08Z",
+          "dependencies": [
+            "BepInEx-BepInExPack-5.4.2305"
+          ],
+          "description": "A new settings menu: separate volume sliders (effects, music, voice), voice modes, free FPS limit, tabs for Audio, Display, Controls, Keybinds and Mods.",
+          "file_size": 75709,
+          "website_url": "https://github.com/SleepyMiles/BetterSettings"
         }
       }
     },
