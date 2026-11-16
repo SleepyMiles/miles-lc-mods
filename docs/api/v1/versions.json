@@ -96,6 +96,20 @@
         }
       }
     },
+    "SafeQuit": {
+      "date_created": "2026-11-16T17:21:18Z",
+      "versions": {
+        "1.0.0": {
+          "date_created": "2026-11-16T17:21:18Z",
+          "dependencies": [
+            "BepInEx-BepInExPack-5.4.2305"
+          ],
+          "description": "No more Unity crash window when you close a modded Lethal Company. Saves everything first, then closes the game.",
+          "file_size": 26306,
+          "website_url": "https://github.com/SleepyMiles/SafeQuit"
+        }
+      }
+    },
     "loaforcsSoundAPI_LethalCompany": {
       "date_created": "2026-11-09T09:28:49Z",
       "versions": {

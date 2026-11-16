@@ -129,6 +129,25 @@
       "readme": "mods/loaforcsSoundAPI_LethalCompany/README.md",
       "changelog": null,
       "notes": "Fork of loaforc's SoundAPI bindings (GPL-3.0)."
+    },
+    {
+      "id": "SafeQuit",
+      "name": "SafeQuit",
+      "author": "SleepyMiles",
+      "version": "1.0.0",
+      "description": "No more Unity crash window when you close a modded Lethal Company. Saves everything first, then closes the game.",
+      "dependencies": [
+        "BepInEx-BepInExPack-5.4.2305"
+      ],
+      "website": "https://github.com/SleepyMiles/SafeQuit",
+      "download": "https://github.com/SleepyMiles/miles-lc-mods/releases/download/SafeQuit-1.0.0/SafeQuit-1.0.0.zip",
+      "size": 26306,
+      "sha256": "579bf65fcff7811609ca479e679741a9110ff095a9efc66110e6e41c612a6f07",
+      "updated": "2026-11-16",
+      "icon": "mods/SafeQuit/icon.png",
+      "readme": "mods/SafeQuit/README.md",
+      "changelog": "mods/SafeQuit/CHANGELOG.md",
+      "notes": null
     }
   ]
 }
