@@ -22,6 +22,17 @@
           "description": "Unofficial compatible update for v.81 by SleepyMiles. The most advanced and by far most stable lobby mod with perfect additions for your LethalCompany adventure. Including nearly perfectly synched late joining into lobbies. Includes cosmetics compability. Fully configurable in-game with preset support.",
           "file_size": 28155273,
           "website_url": "https://RedactedDueToThunderstoreLethalCompanyModdingModeratorTeamPolicy"
+        },
+        "1.2.12": {
+          "date_created": "2026-11-16T17:21:45Z",
+          "dependencies": [
+            "BepInEx-BepInExPack-5.4.2305",
+            "Rune580-LethalCompany_InputUtils-0.7.13",
+            "x753-More_Suits-1.5.4"
+          ],
+          "description": "Unofficial compatible update for v.81 by SleepyMiles. The most advanced and by far most stable lobby mod with perfect additions for your LethalCompany adventure. Including nearly perfectly synched late joining into lobbies. Includes cosmetics compability. Fully configurable in-game with preset support.",
+          "file_size": 57052474,
+          "website_url": "https://RedactedDueToThunderstoreLethalCompanyModdingModeratorTeamPolicy"
         }
       }
     },

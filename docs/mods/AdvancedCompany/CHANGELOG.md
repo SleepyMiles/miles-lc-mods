@@ -1,3 +1,106 @@
+# 1.2.12
+### Player models
+- **Cat, Fox and Raccoon ears and Dragon horns take the colors of the suit you wear.** On the Thicc suits these pieces are painted with the body's own texture: the helmet paint. They now wear exactly what your body wears. On Thicc that is the very same material as the helmet, so the ears blend into it without a line, and a suit that paints the helmet differently paints the ears too. Fur, horns and tails that have their own colors on the original suits keep them.
+- **Thicc looks like in the Thicc Company mod.** The body now uses Thicc's own material (its shine, its surface detail, both sides drawn) with the colors of your suit. Before, it used the game's suit material, so Thicc's own pieces looked a bit different from the body.
+- Everyone in the lobby needs this version.
+
+# 1.2.11
+### Player models
+- **Cat, Fox and Raccoon ears look like part of the helmet again.** On those Thicc suits the whole top of the helmet is shaped into the ears, so cutting out only the ears always left an edge, a gap or loose bits at the base. The piece is now that whole shaped helmet top (above the visor), and it is laid onto the helmet of the model you wear: Thicc, Default and Female each get their own fit, a hair over the helmet so the helmet never shows through.
+- Checked all ears, horns and tails again on all three models: the other pieces sit on the body like on the original suits.
+- Everyone in the lobby needs this version.
+
+# 1.2.10
+### Player models
+- **Cat, Fox and Raccoon ears: the bases are complete.** Checked every ear, horn and tail piece against the original Thicc suits: all pieces match exactly, except that the Cat, Fox and Raccoon ears were cut off a little high. On those suits the sides of the helmet run up into the ears. The pieces now go further down the helmet sides, like on the original suits.
+- Everyone in the lobby needs this version.
+
+# 1.2.9
+### Player models
+- **Ears, horns and tails from Thicc Company sit where they belong.**
+  - On Thicc they are exactly where the original Thicc suits had them. They no longer take the Head/Hip fitting from 1.2.5 (that moved them 5 cm into the helmet).
+  - Cat, Fox and Raccoon ears were only the tips, floating about 6 cm above the helmet: on those suits the helmet itself is shaped into the ears. They now include that shaped part of the helmet.
+  - On Default and Female they start fitted to that model: ears moved and sized to its helmet (Default 95%, Female 93%), tails moved to its back under the belt.
+  - You can still move each one yourself; Reset goes back to this fitting.
+- Everyone in the lobby needs this version.
+
+# 1.2.8
+### Player models
+- **Fixed the freeze.** The game's own log (Player.log) shows an error on every frame after picking Thicc in 1.2.6: removed buttons were left in the menu's list of clickable things, and every mouse update hit them (3,791 errors, each written to the log). 1.2.5 had none. 1.2.6 changed how the model tab removes its buttons (taking them off the menu first); that is back to the normal way, and the tab is now rebuilt only when it is shown.
+- 1.2.7's background suit textures stay (they removed a separate stop of a few seconds when a suit is first put on Thicc).
+- Everyone in the lobby needs this version.
+
+# 1.2.7
+### Player models
+- **No more freeze when picking Thicc or changing suits on Thicc.** Thicc needs its own copy of every suit's texture (its body uses another texture layout). Making that copy took a few seconds and the game stopped meanwhile. It is now made in the background: the body keeps what it wears for a moment, then the suit shows. Still made once per suit.
+- **Model tab text:** the numbers tile shows only the numbers (R / U / F in cm, size in %), so it fits its tile; the picked model and the picked cosmetic are the lit tiles. Labels that are too long get cut off instead of running over the next tile.
+- The list of worn cosmetics in the model tab also updates when a preset or saved config is loaded.
+- Everyone in the lobby needs this version.
+
+# 1.2.6
+### Player models
+- **Fitting per cosmetic.** The model tab now lists every cosmetic you wear (with its picture) plus Head gear, Vest and Boots. Pick one, then Up / Down / Forward / Back / Left / Right, Bigger / Smaller or Reset; only that cosmetic moves, on the model picked. A cosmetic you haven't moved yet uses what you set for its body part in 1.2.5, so nothing jumps. Reset takes a cosmetic back to that.
+- **Thicc: no more patches with suits from other mods** (e.g. AdditionalSuits' blue suit: patches on the front of the hips and the top of the butt). Those suit textures keep a thin line of the old color along the edges of the suit pieces, and Thicc's map took some spots from right there. The map now only takes suit color from well inside the pieces. Checked with all 8 AdditionalSuits colors, the game's suits, Bee and Bunny.
+- Fitting is still saved on your PC only (`BepInEx/config/advancedcompany/model_offsets.json`).
+- Everyone in the lobby needs this version.
+
+# 1.2.5
+### Player models
+- **Cosmetics sit on the model again** (as in 1.2.2): on Female and Thicc they are on the model's own head, chest, hips, arm and legs. 1.2.3 had moved them back onto the normal body by mistake (the floating piece was the helmet mount, fixed in 1.2.4, not the cosmetics). The helmet mount and worn items keep their 1.2.4 fitting.
+- **Thicc: no more dark spots on the suit.** When the model is small on screen the game uses smaller copies of the texture, and those mixed in the dark background around Thicc's texture pieces (spots on the butt and around the hips). The suit texture made for Thicc is now filled everywhere with suit color.
+- Everyone in the lobby needs this version.
+
+# 1.2.4
+### Player models
+- **Fixed the floating helmet mount** (the piece on top of the helmet where the helmet lamp, headset and vision enhancer go). It was placed for the normal helmet; on Female it floated about 6 cm above the helmet, on Thicc about 2.5 cm. It now follows the "Head gear" fitting, with defaults measured for each model's helmet (Female 5.9 cm down / 2.1 cm back, Thicc 2.3 cm down / 0.8 cm back). Shown on the menu figure too.
+- Reset in the fitting goes back to these defaults (not to zero).
+- Everyone in the lobby needs this version.
+
+# 1.2.3
+### Player models
+- **Fixed floating cosmetics.** 1.2.2 put cosmetics on the model's own bones, but the models' chest and hip bones sit 14-18 cm away from the normal body's, so chest and hip cosmetics floated. Cosmetics are on the normal body's bones again (like 1.2.1, which was almost right) and the fitting in the model tab moves them from there.
+- **Worn items fit too:** the model tab has three more fitting slots: Head gear (helmet lamp, headset, vision enhancer, tactical helmet, bunny ears), Vest (bulletproof vest) and Boots (rocket boots, flippers, light shoes). They move and scale per model like the cosmetics. Worn items aren't on the menu figure, so these show in the game only.
+- **Ears, horns and tails sit where they sat on the Thicc models** (they are now placed for the normal body's head and hips, shifted by the exact distance to Thicc's).
+- **Thicc: no more torn spots.** Dark marks of the normal suit (seams, dirt) no longer land on Thicc's body, and its boots stay black at the top.
+- Everyone in the lobby needs this version.
+
+# 1.2.2
+### Player models
+- **Cosmetics follow the model.** On Female and Thicc, cosmetics now sit on the model's own head, chest, hips, arm and legs instead of on the hidden normal body underneath.
+- **Fit cosmetics per model** (model tab, under the models): pick a body part (Head, Chest, Hip, Arm, L leg, R leg), then Up / Down / Forward / Back / Left / Right (half a centimetre per click), Bigger / Smaller, or Reset. It shows in the preview right away and in the game. Saved per model in `BepInEx/config/advancedcompany/model_offsets.json`. Other players see your fitting only if they have the same file.
+- **Ears, horns and tails are cosmetics now** (from Thicc Company): the head pieces are in the head tab, the tails in the hip tab. They work on every model, Default included. Pieces that came together are separate (Dog and Devil had ears/horns and tail in one piece). 20 pieces. The tails don't swing yet.
+- **Thicc: suits fit now.** The suit's texture is mapped onto Thicc's own texture layout (before, parts of the body came out black, and only the color was right).
+- **The preview matches the game:** the model has the size it has in the game, and cosmetics on the figure have their in-game size (they were about 12% too big in the preview, also on the normal body).
+- Model tab: the figure tab icon of 1.2.0 is back. Default has a picture like Female and Thicc. Only 3 models now (Default, Female, Thicc).
+- A Thicc animal picked in 1.2.0 / 1.2.1 becomes Thicc + that animal's ears and tail.
+- Not done yet: held items are still placed for the normal body.
+- Everyone in the lobby needs this version.
+
+# 1.2.1
+### Player models
+- **Fixed: the models didn't show at all.** The model was put on a player before the game had finished setting that player up, which broke it for the rest of the session. It is now put on once the player is ready, checked a few times a second, and tried again if something takes it off.
+- **Three models: Default, Female, Thicc.** The Thicc variants are no longer separate models: their **ears and tails** (Cat, Fox, Raccoon, Dragon, Devil, Fish, Dog, Bunny, Cow, Horse) are picked under the models, like a cosmetic. Click one to put it on (this also picks the Thicc body), click it again to take it off. One set at a time. A variant picked in 1.2.0 is carried over.
+- **The suit is the color for every model now**, also for Thicc (before, Thicc kept its own look). The ears and tails keep their own colors.
+- **The menu figure shows the picked model** (with its ears and tail), and turns and moves like before.
+- **Pictures instead of names** on the model buttons.
+- The model tab now looks like the other tabs (it was drawn as if it was open) and has its own icon.
+- Masked that copy a player: the copy now follows the player the masked really copies, also when that is decided a moment after it spawns (Mirage), and changes when that player changes model.
+- If the old model mods are still installed (Female_Scavenger, ThiccCompanyModelReplacement), their suits no longer change the model. They can be removed, together with Female_Scavenger_Reskiner and ModelReplacementAPI.
+- Not done yet: cosmetics and held items are still placed for the normal body.
+- Everyone in the lobby needs this version.
+
+# 1.2.0
+- **Player models (first step).** The player menu has a new tab next to the cosmetics (the figure icon) where you pick your model: Default, Female, or one of the Thicc variants (Thicc, Cat, Fox, Raccoon, Dragon, Devil, Fish, Dog, Bunny, Cow, Horse). It is saved with your cosmetics, shown to everyone, given to players who join later, and can be changed in the middle of a game.
+- The suit on the rack is now only the color: the Female model wears the suit you put on; the Thicc variants keep their own look.
+- Masked that copy a player copy that player's model.
+- The models, the suits of the Female Scavenger and Thicc Company mods, and ModelReplacementAPI (which draws the models) now come inside AdvancedCompany. **Remove these mods if you have them:** Female_Scavenger, Female_Scavenger_Reskiner, ThiccCompanyModelReplacement, ModelReplacementAPI. MoreSuits is needed for the suits.
+- Not done yet: cosmetics and held items are still placed for the normal body, and the menu preview still shows the normal body.
+- Everyone in the lobby needs this version to see the models.
+
+# 1.1.37
+### Fixes
+- LAN with progress saved in the host's save ("Save progress" off): XP and perks reset for everyone after a rehost. They are saved under the player's name, but when a player joins the host doesn't know the name yet (LCDirectLAN sends it a moment later), so nothing was ever loaded. The host now loads a player's saved XP and perks as soon as their name arrives. Note: two players with the same name (for example both left on "Lethal Player") share one save.
+
 # 1.1.36
 ### Fixes
 - Voice chat: people sometimes couldn't hear each other after landing on a moon. LethalPerformance deletes every audio mixer that isn't the game's own when a moon loads, and that took AdvancedCompany's voice mixer with it (it could only come back by restarting the game). AdvancedCompany now does that clean-up itself and keeps its voice mixers.
