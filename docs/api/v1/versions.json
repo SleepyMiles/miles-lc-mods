@@ -75,6 +75,22 @@
         }
       }
     },
+    "FrailtyMeltDown": {
+      "date_created": "2026-11-16T17:21:59Z",
+      "versions": {
+        "0.5.1": {
+          "date_created": "2026-11-16T17:21:59Z",
+          "dependencies": [
+            "BepInEx-BepInExPack-5.4.2305",
+            "SleepyMiles-FrailtyPlus-1.2.0",
+            "loaforc-FacilityMeltdown-2.7.5"
+          ],
+          "description": "BETA. Add-on for FrailtyPlus and FacilityMeltdown: the last one standing pulls the apparatus and becomes Armed With Death.",
+          "file_size": 2450682,
+          "website_url": "https://github.com/SleepyMiles/FrailtyMeltDown"
+        }
+      }
+    },
     "LCDirectLAN": {
       "date_created": "2026-11-09T17:20:38Z",
       "versions": {

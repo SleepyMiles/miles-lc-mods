@@ -1,0 +1,124 @@
+# FrailtyMeltDown (Beta)
+
+> **Beta, first build.** Not tested in game yet. Please report anything odd.
+
+An add-on for [FrailtyPlus](https://thunderstore.io/c/lethal-company/p/SleepyMiles/FrailtyPlus/) and [FacilityMeltdown](https://thunderstore.io/c/lethal-company/p/loaforc/FacilityMeltdown/) (both needed): the last one standing pulls the apparatus and becomes **Armed With Death**.
+
+## How it starts
+
+- Someone pulls an apparatus (any kind, also LC Office's).
+- It only counts if, right then, the one who pulled it is **the only player alive** (setting `Who can trigger it`: or the only player in the facility, with everyone else alive **on the ship**).
+  If not, nothing happens that day.
+- From the pull: **the day clock runs on to 11:59 PM and stays there**, so the ship never leaves on its own, and **it can't leave without them** (the lever won't move while they're out there). The only clock left is the meltdown's.
+- Just before **70 s** are left on FacilityMeltdown's timer, the signal translator display opens **in red** for everyone and types **NO TIME LEFT!** (no translator needs to be bought).
+- As its last letter lands, at **70 s** left, **Armed With Death** starts with its **music**, timed so the music's last hit lands on the explosion (setting `Starts at seconds left`).
+- Everyone hears the music; FacilityMeltdown's own music fades out under it.
+- It lasts until you die or the day ends. The meltdown explosion still kills you.
+- With `AloneInFacility`: if anyone leaves the ship, it ends at once.
+
+## Armed With Death
+
+- **60% less damage** from everything. A hit that would kill you at once deals **50** instead (`One-shot cap`).
+- **No healing at all.** Once you're critical you stay critical (and limp).
+- Weight doesn't slow you or tire you. The apparatus doesn't take both hands (switch slots freely).
+- Run 15% faster, jump 20% higher, stamina back 30% faster, sprinting uses 25% less, climbing and hands (picking up, hold-to-use) 50% faster.
+- +1 shovel / knife damage. **Counter**: every monster that attacks you takes 1 damage back.
+- **Danger Sense** (like Drinkable's Hunch Soda): monsters, turrets, landmines, spike traps and steam leaks within 50 m are marked every 5 s, through walls.
+- No fear, no insanity (never Paranoid), no sinking in quicksand, spike traps wait while you walk under them.
+- FrailtyPlus injuries are removed and can't hurt you. **Fatal Bleeding** puts you at critical (10 HP), then it's gone.
+- Underwater you hold your breath 1.5x as long.
+- Other buffs for speed, jump, stamina, weight, melee or damage reduction (Drinkable, FrailtyMedical, TZPPlus, any mod's damage reduction) don't stack: Armed With Death's numbers count.
+- AdvancedCompany's perks do stack on top (sprint speed, jump height, endurance, stamina regen, climbing, Strong arms, Protective skin).
+- EladsHUD+'s detailed stamina shows the real rate with Armed With Death.
+- Shown in EladsHUD+'s status row with the other buffs (teal frame, like Bandaged). Without EladsHUD+: in its own icon row next to FrailtyPlus' icons, like FrailtyMedical's.
+
+## The final seconds
+
+Armed With Death grows as the meltdown runs out:
+
+- **30 seconds left:** the tip box says, under your player name, "30 seconds left. I must hurry!". Run speed, jump, stamina regen, sprint drain, climb and interact bonuses grow by half, the buff's frame turns **blue**, and inside the facility the **nearest exit** is marked on the compass.
+- **15 seconds left:** "I'M RUNNING OUT OF TIME!! I MUST LEAVE THIS PLACE NOW!!". The bonuses are doubled, melee hits deal 5 times their damage, the frame turns **purple**, and critically injured you can still **sprint** (at the 30 seconds speed).
+
+While you're critically injured the red on the screen is turned down, since you stay that way.
+
+## Last Stand
+
+A second buff, on top of Armed With Death: hold the **Glass Shard** with an **apparatus in your inventory** (it hangs on your back).
+
+- A hit that would kill you while you're above critical leaves you **critically injured at 10 HP** instead.
+- Once you're critically injured (10 HP or less), **every hit deals only 1**, also the instant kills Armed With Death turns into hits, lethal falls, the Cruiser, bleeding out and the Shy Guy.
+
+Still deadly: pits, the meltdown explosion, drowning, and the Forest Giant / Old Bird / Kidnapper Fox / Masked grabs (until they get their struggle).
+
+## Carrying
+
+- With Armed With Death **nothing takes both hands**: the apparatus and every other big item can be put away and you can switch slots and pick things up (no "hands full"). A teammate's body still takes both hands.
+- An apparatus put away in the inventory **hangs on the player's back** for everyone with the mod (not in your own view). It works on AdvancedCompany's Default, Female and Thicc models; settings under "Apparatus on the back" (height, tilt, and how far behind the chest per model).
+- When Armed With Death ends and you're alive (the day is over and you're on the ship), **big items in your inventory drop at your feet**, the apparatus too. One in your hands stays there.
+
+## Glass Shard
+
+When the apparatus pull arms Armed With Death, a **Glass Shard** drops at the puller's feet. A stronger Butler's kitchen knife with its own model, icon and name:
+
+- Reaches almost as far as a shovel (**1.4 m**, the knife 0.75 m) with a wider sweep.
+- Stabs **half as fast** as the knife (every 0.86 s instead of 0.43 s).
+- Same damage, sounds and value as the knife (Armed With Death's melee bonus adds to it).
+- Held still in the hand (the knife's hold keeps turning it, which put the wide shard through the fingers): also when you take it out or pick it up, and the hand comes straight back after a stab.
+
+Settings `Glass Shard`: `Drop it` (host), `Reach`, `Stab speed %` (each player's own, for their own stabs), `Still hold`, and for your own view `Hold tilt`, `Hold turn`, `Hold depth`.
+Saving the config file while the game runs applies it at once, so the hold can be tuned without restarting.
+Its files sit next to the DLL: `GlassShard.mesh`, `GlassShard.png`, `GlassShardIcon.png` (without them it looks like the knife).
+
+## What kills you now
+
+| | |
+|---|---|
+| Eyeless dog | the lunge goes through you: **30** |
+| Bracken | **25**, it backs off and can't take you for 5 s (also SnatchinBracken's grab, for now) |
+| Barber | **20** |
+| Maneater | **40** |
+| Earth Leviathan | spits you out: **50** |
+| Nutcracker kick | knocks you back: **30** (its shots: normal damage, less 60%) |
+| Ghost Girl | if she haunts you, she's gone (removed for everyone): you can't get scared or paranoid anyway |
+| Jester | doesn't go after you, goes back in its box |
+| Shy Guy (Scopophobia) | first catch: critical (10 HP) and it's stunned for 30 s, then hunts you again; caught while critical: dead |
+| Mimics | you dodge it: nothing |
+| Comedy / Tragedy mask | never takes you |
+| Cadaver / Assimilated infection | everything keeps going but stops at 99%: "YOU FIGHT IT WITH YOUR LAST EFFORT". You only bloom if you die |
+| Circuit bees, turrets, landmines, Old Bird missiles, other explosions | normal damage, less 60% (a landmine: never more than 50) |
+| Lightning | **50** |
+| Falls | 60% less; far too high still kills |
+| Cruiser runs you over / crash | critical (10 HP) |
+| Items that kill you (UsualScrap candy, Wesley's Glass of Water...) | nothing |
+| Wesley's Jester / Ghost Girl | like the normal ones |
+| Wesley's Core Heater bomb | an explosion (once) |
+| Wesley's stone trap | **50** |
+| Any other one-shot | **50** |
+| **Still death** | pits / out of the map, drowning, the Mineshaft elevator, a dead Forest Giant falling on you, the meltdown explosion, being left behind |
+
+Not in this build yet (they still kill): Forest Giant grab, Old Bird grab, Kidnapper Fox, Masked. They get a struggle (press a key to break free) in the next build, with SnatchinBracken's grab and the Snare Flea. Also next: swimming like AdvancedCompany's flippers, the apparatus on your back.
+
+## Settings
+
+The host's settings count for everyone (sent when the apparatus is pulled).
+
+- `Trigger`: Who can trigger it (OnlyOneAlive / AloneInFacility), Starts at seconds left.
+- `Armed With Death`: Damage reduction %, Run speed %, Jump height %, Stamina regen %, Sprint drain reduction %, Climb speed %, Interact speed %, Air multiplier, Melee bonus damage, Counter damage, One-shot cap.
+- `Danger Sense`: Range, Every, Marks stay.
+- `Final seconds`: Boost at 30 seconds %, Boost at 15 seconds %, Melee multiplier at 15 seconds (host), Line at 30 seconds, Line at 15 seconds, Show the nearest exit (your own).
+- `Glass Shard`: Hold rotate X / Y / Z and Hold move X / Y / Z (your own view), next to Hold tilt / turn / depth. Other players see the shard in your fist the way you set it; Others rotate X / Y / Z turns what you see of them.
+- `Display`: Critical red tint %.
+- `Apparatus on the back`: Show it, Height, Tilt, Depth Default / Female / Thicc (your own view of everyone; saving the file while the game runs applies it).
+- `Display`: Show buff icons without EladsHUD+, Buff icons offset X / Y, Buff icon scale (your own).
+- `Signal`: Message (empty = no message).
+- `Music`: Volume (your own).
+
+- `Glass Shard`: Drop it, Reach, Stab speed %, Still hold, Hold tilt, Hold turn, Hold depth.
+
+The music is `ArmedWithDeath.ogg` next to the DLL. Without that file there is simply no music.
+
+## Needs
+
+- [FrailtyPlus](https://thunderstore.io/c/lethal-company/p/SleepyMiles/FrailtyPlus/) 1.2.0 or newer (required)
+- [FacilityMeltdown](https://thunderstore.io/c/lethal-company/p/loaforc/FacilityMeltdown/) 2.7.5 or newer (required): its timer sets when Armed With Death starts, and its explosion ends it.
+- **Everyone in the lobby needs this mod.**

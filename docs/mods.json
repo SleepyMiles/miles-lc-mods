@@ -70,6 +70,27 @@
       "notes": "Fork of viviko's BunkbedRevive, fixed for v81."
     },
     {
+      "id": "FrailtyMeltDown",
+      "name": "FrailtyMeltDown",
+      "author": "SleepyMiles",
+      "version": "0.5.1",
+      "description": "BETA. Add-on for FrailtyPlus and FacilityMeltdown: the last one standing pulls the apparatus and becomes Armed With Death.",
+      "dependencies": [
+        "BepInEx-BepInExPack-5.4.2305",
+        "SleepyMiles-FrailtyPlus-1.2.0",
+        "loaforc-FacilityMeltdown-2.7.5"
+      ],
+      "website": "https://github.com/SleepyMiles/FrailtyMeltDown",
+      "download": "https://github.com/SleepyMiles/miles-lc-mods/releases/download/FrailtyMeltDown-0.5.1/FrailtyMeltDown-0.5.1.zip",
+      "size": 2450682,
+      "sha256": "4b12f5677437ccb3cbf2bb96a9c5a07cee0e561287bfeae408e51d24585d3623",
+      "updated": "2026-11-16",
+      "icon": "mods/FrailtyMeltDown/icon.png",
+      "readme": "mods/FrailtyMeltDown/README.md",
+      "changelog": "mods/FrailtyMeltDown/CHANGELOG.md",
+      "notes": null
+    },
+    {
       "id": "LC_Office",
       "name": "LC Office",
       "author": "SleepyMiles",
