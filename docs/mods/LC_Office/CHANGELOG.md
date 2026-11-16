@@ -1,3 +1,26 @@
+
+## 2.3.11
+- Elevator: the gate in front of the shaft on the entrance floor belongs to the building. Once the apparatus is pulled it never closes again, also while an apparatus in the elevator's socket powers the elevator (that only powers the elevator). It still opens when the elevator arrives on the entrance floor.
+- Without power the button lights of every elevator panel are off and the screens on the floors are off; the screen inside the elevator says "No Power". An apparatus in the elevator's socket turns them all back on.
+- Everyone in the lobby needs this version.
+
+## 2.3.10
+- Elevator: without power nothing closes any more. When the apparatus is pulled, the gate in front of the shaft on the entrance floor now stays the way it was (open if the elevator was standing on that floor), so the shaft is left open. Before, that gate still closed. Everyone in the lobby needs this version.
+
+## 2.3.9
+- Elevator: when the apparatus is pulled and the elevator drops to the bottom floor, its doors stay open (they used to close first, as if someone had called it). The safety gate in front of the shaft on the entrance floor still closes. Everyone in the lobby needs this version.
+
+## 2.3.8
+- **Experimental: the office's apparatus room in the mansion.** The mansion interior can now end one of its side paths in the office's apparatus room (with its apparatus), when there is space for the room. At most one per mansion; when it doesn't fit, the mansion takes its usual dead-end room. The log says each round whether it was built.
+- Settings in `SleepyMiles.LCOfficeFixes.cfg`: "Apparatus room in the mansion" (on / off) and "How far into the mansion". The host's settings are used for everyone in the lobby.
+- **Everyone in the lobby needs this version.**
+
+## 2.3.7
+- Private fork by SleepyMiles. The fixes below are in a second file, `LCOfficeFixes.dll`, next to `LCOffice.dll`. **Everyone in the lobby needs this version** (the first fix changes which rooms are generated).
+- The apparatus room is now tried first as the end room of the office, so the office nearly always has its apparatus. Before, it was picked only about half of the time.
+- Scrap (host): a random scrap spot that ends up through a wall, outside its room, inside or under furniture is moved to an open place in the same room. Desk and shelf spots that sit inside a different piece of furniture use the floor next to it.
+- Cadaver growths (host) no longer grow within 4 m of the entrance doors, so they don't cover the door.
+
 ## 2.3.6
 - Private v81 fork by SleepyMiles, for playing with friends.
 - Fixed the metal detectors: v81 changed the game's kill function, and the detector still called the old one. Its zap threw an error every frame instead of killing the player carrying metal. It works again.

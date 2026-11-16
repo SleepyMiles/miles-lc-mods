@@ -5,6 +5,11 @@
 **Private v81 fork by SleepyMiles, for playing with friends. Not an official update.** The LC Office Patcher is included, so you don't need it separately.
 Adds new office-themed interior!
 
+### What this fork changes
+- 2.3.8 (experimental): the office's apparatus room can also be built in the mansion interior. Switch in `SleepyMiles.LCOfficeFixes.cfg`; the host's setting counts for everyone.
+- 2.3.7: the apparatus room nearly always generates, scrap no longer ends up through walls or inside furniture, cadaver growths keep away from the entrance doors. These are in `LCOfficeFixes.dll`; everyone in the lobby needs the same version.
+- 2.3.6: works on v81 (metal detectors fixed), LC Office Patcher included.
+
 # Credits
 
 This mod is now being maintained & updated by [JacobG5](https://thunderstore.io/c/lethal-company/p/JacobG5/)

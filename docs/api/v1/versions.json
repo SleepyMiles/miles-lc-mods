@@ -81,6 +81,19 @@
     "LC_Office": {
       "date_created": "2026-11-09T09:28:48Z",
       "versions": {
+        "2.3.11": {
+          "date_created": "2026-11-16T17:21:30Z",
+          "dependencies": [
+            "JacobG5-JLL-1.10.0",
+            "Zaggy1024-PathfindingLib-2.4.1",
+            "Zaggy1024-SmartEnemyPathfinding-0.0.4",
+            "IAmBatby-LethalLevelLoader-1.6.9",
+            "Alice-DungeonGenerationPlus-1.5.1"
+          ],
+          "description": "Adds new office-themed interior. Private v81 fork with the LC Office Patcher included.",
+          "file_size": 36080888,
+          "website_url": "https://github.com/Piggy3590/LC_Office"
+        },
         "2.3.6": {
           "date_created": "2026-11-09T09:28:48Z",
           "dependencies": [
